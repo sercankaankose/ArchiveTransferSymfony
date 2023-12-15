@@ -1,0 +1,586 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link type="text/css" href="{{ asset('css/breadcrumb.css') }}" rel="stylesheet">
+    <style>
+        body {
+            overflow-x: hidden;
+        }
+
+        .container-fluid {
+            display: flex;
+            align-items: stretch;
+            margin-top: -25px;
+        }
+
+        .delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+            border: none;
+            padding: 2px 8px;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s;
+        }
+
+        .delete-btn:hover {
+            background-color: #c82333;
+        }
+
+        .card {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .iframe-container {
+            flex: 1;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: unset;
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 20px;
+        }
+
+        iframe {
+            width: 100%;
+            height: 100%;
+            margin-right: -25px;
+        }
+
+        .form-container label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        textarea,
+        input {
+
+            position: relative;
+            cursor: text;
+            font-size: 14px;
+            line-height: 20px;
+            padding: 0 16px;
+            height: 48px;
+            background-color: #fff;
+            border: 1px solid #d6d6e7;
+            border-radius: 3px;
+            color: rgb(35, 38, 59);
+            box-shadow: inset 0 1px 4px 0 rgb(119 122 175 / 30%);
+            overflow: hidden;
+            transition: all 100ms ease-in-out;
+
+            :focus {
+                border-color: #3c4fe0;
+                box-shadow: 0 1px 0 0 rgb(35 38 59 / 5%);
+            }
+
+        }
+
+        .button-35 {
+            backface-visibility: hidden;
+            background-color: #405cf5;
+            border-radius: 6px;
+            border-width: 0;
+            box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue", Ubuntu, sans-serif;
+            font-size: 100%;
+            height: 44px;
+            line-height: 1.15;
+            margin: 12px 0 0;
+            outline: none;
+            overflow: hidden;
+            padding: 0 25px;
+            position: relative;
+            text-align: center;
+            text-transform: none;
+            transform: translateZ(0);
+            transition: all .2s, box-shadow .08s ease-in;
+            user-select: none;
+            -webkit-user-select: none;
+            touch-action: manipulation;
+            width: 100%;
+        }
+
+        .button-35:disabled {
+            cursor: default;
+        }
+
+        .button-35:focus {
+            box-shadow: rgba(50, 50, 93, .1) 0 0 0 1px inset, rgba(50, 50, 93, .2) 0 6px 15px 0, rgba(0, 0, 0, .1) 0 2px 2px 0, rgba(50, 151, 211, .3) 0 0 0 4px;
+        }
+
+        .form-container .row {
+            display: flex;
+            align-items: baseline;
+        }
+
+        .form-container .row .col {
+            flex: 0 0 50%;
+            padding-right: 10px;
+        }
+
+        .form-container .row .col.small {
+            flex: 0 0 10%;
+        }
+
+        .form-container .row .col.big {
+            flex: 0 0 40%;
+        }
+
+        .form-container .row .col.bigger {
+            flex: 0 0 90%;
+        }
+
+        .form-container .row .col.mid {
+            flex: 0 0 22.5%;
+        }
+
+        .form-container .row .col.half {
+            flex: 0 0 50%;
+        }
+
+        .form-container .row .col.trequarter {
+            flex: 0 0 75%;
+        }
+
+        .form-container .row .col.quarter {
+            flex: 0 0 25%;
+        }
+
+        .form-container .row .col.ten {
+            flex: 0 0 05%;
+        }
+
+        .form-container .row .col.keywords {
+            flex: 0 0 100%;
+
+        }
+
+        .form-container .row .col.primary {
+            flex: 0 0 14%;
+
+        }
+
+        .form-container textarea {
+        }
+
+        .card {
+            box-shadow: rgba(6, 24, 44, 0.4) 0px 0px 0px 2px, rgba(6, 24, 44, 0.65) 0px 4px 6px -1px, rgba(255, 255, 255, 0.08) 0px 1px 0px inset;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            background: #e8eff5;
+            padding: 5px;
+        }
+
+        .nav-pills .nav-link {
+            background-color: #e7eaef;
+            color: #0a58ca;
+            height: 50px;
+            width: 297.5px;
+        }
+
+        .nav-pills .nav-link.active,
+        .nav-pills .show > .nav-link {
+            background-color: #203b5d;
+            color: #f8f7f7;
+        }
+
+
+        .form-container input[type="text"],
+        .form-container input[type="email"],
+        .form-container input[type="number"],
+        .form-container textarea,
+        .form-container select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        label-container label {
+            text-align: right;
+            display: block;
+            padding: 5px;
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid">
+        <div class="form-container">
+            <div class="btn-group">
+                <a class="btn btn-danger btn-lg" style=" margin-top: -10px;">Pdf Hatası Bildir</a>
+                <a class="btn btn-success btn-lg" style=" margin-top: -10px;">Makaleyi Kaydet</a>
+            </div>
+            {{ form_start(form) }}
+            <div class="card mt-3 mb-3">
+                <div class="row">
+                    <div class="col primary">
+                        {{ form_row(form.primaryLanguage) }}
+                    </div>
+                    <div class="col big">
+                        {{ form_row(form.doi) }}
+                    </div>
+                    <div class="col mid">
+                        {{ form_row(form.firstPage) }}
+                    </div>
+                    <div class="col mid">
+                        {{ form_row(form.lastPage) }}
+                    </div>
+                </div>
+            </div>
+            <ul class="nav nav-pills custom-tab-nav mb-3" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="pills-metadata-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-metadata" type="button" role="tab"
+                            aria-controls="pills-metadata" aria-selected="true">Üst Veri
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-author-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-author" type="button" role="tab"
+                            aria-controls="pills-author" aria-selected="false">Yazar
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="pills-citations-tab" data-bs-toggle="pill"
+                            data-bs-target="#pills-citations" type="button" role="tab"
+                            aria-controls="pills-citations" aria-selected="false">Atıflar
+                    </button>
+                </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+
+                <!-- Translations -->
+                <div class="tab-pane fade show active" id="pills-metadata" role="tabpanel"
+                     aria-labelledby="pills-metadata-tab">
+                    <div id="translationsContainer"
+                         data-prototype="{{ form_row(form.translations.vars.prototype)|e('html_attr') }}">
+                        {% for translationForm in form.translations %}
+                            <div class="card mb-3">
+                                <div style="text-align: right;">
+                                    <button class="delete-btn" type="button" onclick="deleteCard(this)">&times;</button>
+                                </div>
+                                <div class="row">
+                                    <div class="col small">
+                                        {{ form_row(translationForm.locale) }}
+                                    </div>
+                                    <div class="col bigger">
+                                        {{ form_row(translationForm.title) }}
+                                    </div>
+                                    <div class="abstract">
+                                        {{ form_row(translationForm.abstract) }}
+                                    </div>
+                                    <div class="col keywords">
+                                        {{ form_row(translationForm.keywords) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="button-35" id="addTranslationsButton">Yeni Veri Ekle</button>
+                </div>
+                <!-- End translations -->
+                <!-- authors -->
+                <div class="tab-pane fade" id="pills-author" role="tabpanel"
+                     aria-labelledby="pills-author-tab">
+                    <div id="authorContainer"
+                         data-prototype="{{ form_row(form.authors.vars.prototype)|e('html_attr') }}">
+                        {% for authorForm in form.authors %}
+
+                            <div class="card mb-3">
+                                <div style="text-align: right;">
+                                    <button class="delete-btn" type="button" onclick="deleteCard(this)">&times;</button>
+                                </div>
+                                <div class="row">
+                                    <div class="col half">
+                                        {{ form_row(authorForm.firstname) }}
+                                    </div>
+                                    <div class="col half">
+                                        {{ form_row(authorForm.lastname) }}
+                                    </div>
+                                    <div class="col half">
+                                        {{ form_row(authorForm.orcId) }}
+                                    </div>
+                                    <div class="col half">
+                                        {{ form_row(authorForm.email) }}
+                                    </div>
+                                    <div class="col trequarter">
+                                        {{ form_row(authorForm.institute) }}
+                                    </div>
+                                    <div class="col quarter">
+                                        {{ form_row(authorForm.part) }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="button-35" id="addAuthorButton">Yeni Yazar Ekle</button>
+                </div>
+                <!-- End authors -->
+
+                <!-- citations -->
+                <div class="tab-pane fade" id="pills-citations" role="tabpanel"
+                     aria-labelledby="pills-citations-tab">
+                    <div id="citationContainer"
+                         data-prototype="{{ form_row(form.citations.vars.prototype)|e('html_attr') }}">
+                        {% for citationForm in form.citations %}
+                            <div class="card mb-3">
+                                <div style="text-align: right;">
+                                    <button class="delete-btn" type="button" onclick="deleteCard(this)">&times;</button>
+                                </div>
+                                <div class="row">
+                                    {#                                    {{ form_row(form.citationsText) }} #}
+                                    <div class="col small">
+                                        {{ form_row(citationForm.row) }}
+                                    </div>
+                                    <div class="col bigger">
+                                        {{ form_row(citationForm.referance) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="button-35" id="addCitationButton">Yeni Atıf Ekle</button>
+                </div>
+            </div>
+            <!-- End Latest -->
+        </div>
+
+
+        {{ form_end(form) }}
+
+
+        <div class="iframe-container" style="margin-right: -14px">
+            <iframe src="{{ path('article_pdf', { 'filename': pdfFile }) }}"></iframe>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function deleteCard(button) {
+            var cardDiv = button.closest('.card');
+            cardDiv.remove();
+        }
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <script id="translationTemplate" type="text/template">
+        <div class="card mb-4">
+            <div style="text-align: right;">
+                <button class="delete-btn" type="button" onclick="deleteCard(this)">&times;</button>
+            </div>
+            <div class="row">
+                <div class="col small">
+                    <label for="article_form_translations_new_locale" class="required">Dil</label>
+                    <input type="text" id="article_form_translations_new_locale"
+                           name="article_form[translations][new][locale]" required="required" class="form-control">
+                </div>
+                <div class="col bigger">
+                    <label for="article_form_translations_new_title" class="required">Başlık</label>
+                    <input type="text" id="article_form_translations_new_title"
+                           name="article_form[translations][new][title]" required="required" class="form-control">
+                </div>
+                <div class="abstract">
+                    <label for="article_form_translations_new_abstract" class="required">Özet</label>
+                    <textarea id="article_form_translations_new_abstract"
+                              name="article_form[translations][new][abstract]" required="required"
+                              class="form-control custom-textarea-class" style="width: 100%; height: 250px;"></textarea>
+                </div>
+                <div class="col keywords">
+                    <label for="article_form_translations_new_keywords" class="required">Anahtar Kelimeler</label>
+                    <input type="text" id="article_form_translations_new_keywords"
+                           name="article_form[translations][new][keywords]" required="required" class="form-control">
+                </div>
+            </div>
+        </div>
+    </script>
+    <script id="authorTemplate" type="text/template">
+        <div class="card mb-4">
+            <div style="text-align: right;">
+                <button class="delete-btn" type="button" onclick="deleteCard(this)">&times;</button>
+            </div>
+            <div class="row">
+                <div class="col half">
+                    <label for="article_form_authors_new_firstname" class="required">Ad</label>
+                    <input type="text" id="article_form_authors_new_firstname"
+                           name="article_form[authors][new][firstname]" required="required"
+                           class="form-control col half">
+                </div>
+                <div class="col half">
+                    <label for="article_form_authors_new_lastname" class="required">Soyad</label>
+                    <input type="text" id="article_form_authors_new_lastname"
+                           name="article_form[authors][new][lastname]" required="required"
+                           class="form-control col half">
+                </div>
+                <div class="col half">
+                    <label for="article_form_authors_new_orcId" class="required">Orc Id</label>
+                    <input type="text" id="article_form_authors_new_orcId" name="article_form[authors][new][orcId]"
+                           required="required" class="form-control col half">
+                </div>
+                <div class="col half">
+                    <label for="article_form_authors_new_email" class="required">E-posta</label>
+                    <input type="email" id="article_form_authors_new_email" name="article_form[authors][new][email]"
+                           required="required" class="form-control col half">
+                </div>
+                <div class="col trequarter">
+                    <label for="article_form_authors_new_institute" class="required">Kurum</label>
+                    <input type="text" id="article_form_authors_new_institute"
+                           name="article_form[authors][new][institute]" required="required"
+                           class="form-control col trequarter">
+                </div>
+                <div class="col quarter">
+                    <label for="article_form_authors_new_part" class="required">Görevi</label>
+                    <select id="article_form_authors_new_part" name="article_form[authors][new][part]"
+                            class="form-control col quarter">
+                        <option value="author" selected="selected">yazar</option>
+                        <option value="translater">çevirmen</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </script>
+    <script id="citationTemplate" type="text/template">
+        <div class="card mb-3">
+            <div style="text-align: right;">
+                <button class="delete-btn" type="button" onclick="deleteCard(this)">&times;</button>
+            </div>
+            <div class="row">
+                <div class="col small">
+                    <label for="article_form_citations_new_row" class="required">Numara</label>
+                    <input type="text" id="article_form_citations_new_row" name="article_form[citations][new][row]"
+                           required="required" class="form-control col small">
+                </div>
+                <div class="col bigger">
+                    <label for="article_form_citations_new_referance" class="required">Referans</label>
+                    <input type="text" id="article_form_citations_new_referance"
+                           name="article_form[citations][new][referance]" required="required"
+                           class="form-control col bigger">
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script>
+        //translation
+        $(document).ready(function () {
+            var translationsContainer = $('#translationsContainer');
+            var translationTemplate = $('#translationTemplate').html();
+
+            $('#addTranslationsButton').click(function () {
+                var translationsCount = translationsContainer.find('.card').length;
+                var newTranslation = translationTemplate.replace(/new/g, translationsCount);
+                translationsContainer.append(newTranslation);
+            });
+        });
+    </script>
+    <script>
+        //author
+        $(document).ready(function () {
+            var authorsContainer = $('#authorContainer');
+            var authorTemplate = $('#authorTemplate').html();
+
+            $('#addAuthorButton').click(function () {
+                var authorsCount = authorsContainer.find('.card').length;
+                var newAuthor = authorTemplate.replace(/new/g, authorsCount);
+                authorsContainer.append(newAuthor);
+            });
+        });
+    </script>
+    <script>
+        //citations
+        $(document).ready(function () {
+            var citationsContainer = $('#citationContainer');
+            var citationTemplate = $('#citationTemplate').html();
+
+            $('#addCitationButton').click(function () {
+                var citationsCount = citationsContainer.find('.card').length;
+                var newCitation = citationTemplate.replace(/new/g, citationsCount);
+                citationsContainer.append(newCitation);
+            });
+        });
+    </script>
+
+
+
+
+
+
+
+
+    {#    <script> #}
+    {#        //citations #}
+    {#        document.addEventListener('DOMContentLoaded', function () { #}
+    {#            var citationContainer = document.getElementById('citationContainer'); #}
+    {#            var addCitationButton = document.getElementById('addCitationButton'); #}
+    {#            var prototype = citationContainer.dataset.prototype; #}
+    {#            var index = citationContainer.children.length; #}
+
+    {#            addCitationButton.addEventListener('click', function () { #}
+    {#                var newCitationForm = document.createElement('div'); #}
+    {#                newCitationForm.innerHTML = prototype.replace(/__name__/g, index); #}
+
+    {#                var cardElement = document.createElement('div'); #}
+    {#                cardElement.classList.add('card', 'mb-4'); #}
+
+    {#                var rowElement = document.createElement('div'); #}
+    {#                rowElement.classList.add('row'); #}
+
+
+    {#                var smallColElement = document.createElement('div'); #}
+    {#                smallColElement.classList.add('col', 'small'); #}
+    {#                var smallFormRow = newCitationForm.querySelector('.col.small'); #}
+    {#                smallColElement.appendChild(smallFormRow); #}
+
+    {#                var biggerColElement = document.createElement('div'); #}
+    {#                biggerColElement.classList.add('col', 'bigger'); #}
+    {#                var biggerFormReferance = newCitationForm.querySelector('.col.bigger'); #}
+    {#                biggerColElement.appendChild(biggerFormReferance); #}
+
+    {#                var labelElementReferance = document.createElement('label'); #}
+    {#                labelElementReferance.htmlFor = 'article_form_citations_' + index + '_referance'; #}
+    {#                labelElementReferance.innerText = 'Referans'; #}
+
+    {#                var labelDivReferance = document.createElement('div'); #}
+    {#                labelDivReferance.classList.add('label-container'); #}
+    {#                labelDivReferance.appendChild(labelElementReferance); #}
+
+
+    {#                var labelElementRow = document.createElement('label'); #}
+    {#                labelElementRow.htmlFor = 'article_form_citations_' + index + '_row'; #}
+    {#                smallFormRow.value = index + 1; #}
+    {#                labelElementRow.innerText = 'Numara' #}
+
+    {#                var labelDivRow = document.createElement('div'); #}
+    {#                labelDivRow.classList.add('label-container'); #}
+    {#                labelDivRow.appendChild(labelElementRow); #}
+
+    {#                smallColElement.insertBefore(labelDivRow, smallColElement.firstChild); #}
+    {#                biggerColElement.insertBefore(labelDivReferance, biggerColElement.firstChild); #}
+
+    {#                rowElement.appendChild(smallColElement); #}
+    {#                rowElement.appendChild(biggerColElement); #}
+    {#                cardElement.appendChild(rowElement); #}
+
+    {#                citationContainer.appendChild(cardElement); #}
+    {#                index++; #}
+    {#            }); #}
+    {#        }); #}
+    {#    </script> #}
+{% endblock %}
+{% block title %}Makale Oluştur{% endblock %}
